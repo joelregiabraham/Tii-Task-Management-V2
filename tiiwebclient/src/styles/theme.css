@@ -1,0 +1,197 @@
+/* ClientApp/src/styles/theme.css */
+:root {
+  /* Primary color palette */
+  --primary-color: #2d63ed;
+  --primary-dark: #1e47b5;
+  --primary-light: #6b95ff;
+  
+  /* Secondary colors */
+  --secondary-color: #3e4a79;
+  --secondary-dark: #293050;
+  --secondary-light: #5c6aa6;
+  
+  /* Accent colors */
+  --accent-color: #ff6b6b;
+  --accent-dark: #e64c4c;
+  --accent-light: #ff9797;
+  
+  /* Neutrals */
+  --neutral-900: #1a1a2e;
+  --neutral-800: #232345;
+  --neutral-700: #2f2f63;
+  --neutral-600: #3a3a79;
+  --neutral-500: #565695;
+  --neutral-400: #7676a8;
+  --neutral-300: #9999be;
+  --neutral-200: #bbbbdb;
+  --neutral-100: #e1e1f0;
+  --neutral-50: #f7f7fc;
+  
+  /* Status colors */
+  --success-color: #00c853;
+  --warning-color: #ffab00;
+  --danger-color: #ff3d3d;
+  --info-color: #2196f3;
+
+  /* Task status colors */
+  --status-todo: var(--neutral-400);
+  --status-in-progress: var(--primary-color);
+  --status-done: var(--success-color);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  
+  /* Border radius */
+  --border-radius-sm: 0.25rem;
+  --border-radius-md: 0.5rem;
+  --border-radius-lg: 0.75rem;
+  --border-radius-xl: 1rem;
+  --border-radius-full: 9999px;
+  
+  /* Animation */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms ease;
+}
+
+/* Custom Bootstrap overrides */
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--primary-dark) !important;
+  border-color: var(--primary-dark) !important;
+}
+
+.btn-outline-primary {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.btn {
+  border-radius: var(--border-radius-md);
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  transition: all var(--transition-normal);
+}
+
+.card {
+  border: none;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.form-control, .form-select {
+  border-radius: var(--border-radius-md);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--neutral-200);
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 0.25rem rgba(45, 99, 237, 0.15);
+}
+
+.nav-link {
+  color: var(--neutral-700);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--primary-color);
+}
+
+.badge {
+  font-weight: 500;
+  padding: 0.4em 0.75em;
+  border-radius: var(--border-radius-full);
+}
+
+.alert {
+  border: none;
+  border-radius: var(--border-radius-md);
+}
+
+/* Toast notifications */
+.toast {
+  border: none;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+/* Status colors */
+.badge-todo {
+  background-color: var(--status-todo) !important;
+}
+
+.badge-in-progress {
+  background-color: var(--status-in-progress) !important;
+}
+
+.badge-done {
+  background-color: var(--status-done) !important;
+}
+
+/* Add subtle animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition-normal);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neutral-100);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-300);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-400);
+}

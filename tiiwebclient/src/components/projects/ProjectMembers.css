@@ -1,0 +1,83 @@
+/* ProjectMembers.css */
+.members-container {
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.members-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  transition: background-color var(--transition-fast);
+}
+
+.member-item:hover {
+  background-color: var(--neutral-50);
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+}
+
+.member-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  margin-right: var(--space-md);
+}
+
+.member-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.member-name {
+  font-weight: 500;
+  color: var(--neutral-900);
+  margin-bottom: var(--space-xs);
+}
+
+.member-role {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  align-self: flex-start;
+}
+
+.member-actions .btn-link {
+  color: var(--neutral-500);
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.member-actions .btn-link:hover {
+  color: var(--neutral-900);
+}
+
+.member-actions .dropdown-toggle::after {
+  display: none;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(--neutral-50);
+  color: var(--primary-color);
+  box-shadow: none;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  border-color: var(--neutral-200);
+}

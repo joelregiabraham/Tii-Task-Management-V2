@@ -1,0 +1,251 @@
+/* ProjectDetail.css */
+.project-detail-container {
+  margin-bottom: var(--space-2xl);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.project-icon-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: 60px;
+  border-radius: var(--border-radius-md);
+  background-color: var(--primary-light);
+  color: white;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.project-title {
+  font-weight: 700;
+  color: var(--neutral-900);
+}
+
+.project-metadata {
+  color: var(--neutral-500);
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.project-metadata span {
+  display: flex;
+  align-items: center;
+}
+
+.project-actions {
+  display: flex;
+  align-items: center;
+}
+
+.project-tabs .nav-link {
+  color: var(--neutral-700);
+  padding: var(--space-md) var(--space-lg);
+  font-weight: 500;
+}
+
+.project-tabs .nav-link.active {
+  color: var(--primary-color);
+  font-weight: 600;
+  border-bottom-color: var(--primary-color);
+}
+
+.project-description {
+  color: var(--neutral-600);
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+.task-count-badge {
+  font-weight: 500;
+  padding: 0.4em 0.8em;
+}
+
+.progress-stacked {
+  height: 8px;
+  border-radius: var(--border-radius-full);
+  overflow: hidden;
+}
+
+.progress-segment-done {
+  background-color: var(--status-done) !important;
+}
+
+.progress-segment-progress {
+  background-color: var(--status-in-progress) !important;
+}
+
+.progress-segment-todo {
+  background-color: var(--status-todo) !important;
+}
+
+.task-stats {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.task-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-md);
+  border-radius: var(--border-radius-md);
+  background-color: var(--neutral-50);
+  min-width: 120px;
+}
+
+.task-stat-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-xs);
+  color: var(--neutral-700);
+  font-weight: 500;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: var(--space-xs);
+}
+
+.status-todo {
+  background-color: var(--status-todo);
+}
+
+.status-progress {
+  background-color: var(--status-in-progress);
+}
+
+.status-done {
+  background-color: var(--status-done);
+}
+
+.task-stat-value {
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+  color: var(--neutral-900);
+}
+
+.project-tasks-table th {
+  border-bottom: 2px solid var(--neutral-100);
+  color: var(--neutral-600);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.project-tasks-table td {
+  padding: var(--space-md) var(--space-lg);
+  vertical-align: middle;
+  border-top: none;
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.task-row {
+  transition: background-color var(--transition-fast);
+}
+
+.task-row:hover {
+  background-color: var(--neutral-50);
+}
+
+.task-row.status-todo {
+  border-left: 3px solid var(--status-todo);
+}
+
+.task-row.status-inprogress {
+  border-left: 3px solid var(--status-in-progress);
+}
+
+.task-row.status-done {
+  border-left: 3px solid var(--status-done);
+}
+
+.task-link {
+  color: var(--neutral-900);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.task-link:hover {
+  color: var(--primary-color);
+}
+
+.assignee {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-sm);
+}
+
+.assignee-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  font-size: var(--font-size-xs);
+  margin-right: var(--space-sm);
+}
+
+.settings-section {
+  border-bottom: 1px solid var(--neutral-100);
+  padding-bottom: var(--space-lg);
+}
+
+.settings-section h6 {
+  font-weight: 600;
+  color: var(--neutral-800);
+}
+
+.danger-zone {
+  border: 1px solid var(--danger-color);
+  border-radius: var(--border-radius-md);
+  background-color: rgba(255, 61, 61, 0.05);
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+}
+
+.task-actions .btn {
+  padding: 0.25rem 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .project-actions {
+    margin-top: var(--space-md);
+    align-self: flex-end;
+  }
+  
+  .task-stats {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .task-stat-item {
+    width: 100%;
+  }
+}

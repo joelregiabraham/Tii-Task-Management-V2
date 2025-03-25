@@ -1,0 +1,33 @@
+/* ProjectForm.css */
+.project-form-container {
+  margin-bottom: var(--space-2xl);
+}
+
+.project-form-title {
+  font-weight: 700;
+  color: var(--neutral-900);
+}
+
+.project-form-card {
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  border: none;
+}
+
+.form-control-lg {
+  font-size: var(--font-size-md);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--neutral-700);
+}
+
+.form-text {
+  font-size: var(--font-size-sm);
+}
