@@ -31,5 +31,13 @@ namespace Auth_API.Controllers
             var user = await _userManager.FindByIdAsync(id);
             return user != null ? Ok(user.UserName) : NotFound();
         }
+
+        // GET: api/users/by-username/{username}/id
+        [HttpGet("by-username/{username}/id")]
+        public async Task<IActionResult> GetUserIdByUsername(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            return user != null ? Ok(user.Id) : NotFound();
+        }
     }
 }

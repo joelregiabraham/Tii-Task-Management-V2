@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Net.Http.Headers;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project_API.Models.DTOs;
 using Project_API.Services;
@@ -13,10 +15,13 @@ namespace Project_API.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectService _projectService;
+        private readonly IUserService _userService;
+       
 
-        public ProjectsController(IProjectService projectService)
+        public ProjectsController(IProjectService projectService, IUserService userService)
         {
             _projectService = projectService;
+            _userService = userService;
         }
 
         // GET: api/projects
@@ -160,6 +165,39 @@ namespace Project_API.Controllers
             return NoContent();
         }
 
+        // POST: api/projects/{id}/members/by-username
+        [HttpPost("{id}/members/by-username")]
+        public async Task<IActionResult> AddProjectMemberByUsername(int id, [FromBody] AddProjectMemberByUsernameDto memberDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Check if user has permission to manage members
+            if (!await _projectService.UserHasProjectRoleAsync(userId, id, new[] { RoleConstants.ProjectManager }))
+                return Forbid();
+
+            // Get the userId from the username using a new method in the Project_API
+            var targetUserId = await _userService.GetUserIdByUsernameAsync(memberDto.Username);
+
+            if (string.IsNullOrEmpty(targetUserId))
+                return BadRequest("User not found. Please check the username and try again.");
+
+            // Create a standard AddProjectMemberDto with the userId
+            var addMemberDto = new AddProjectMemberDto
+            {
+                UserId = targetUserId,
+                RoleId = memberDto.RoleId
+            };
+
+            var result = await _projectService.AddProjectMemberAsync(id, addMemberDto);
+
+            if (!result)
+                return BadRequest("Failed to add project member.");
+
+            return NoContent();
+        }
 
 
         // Endpoints to Project_API for Task_API to Use

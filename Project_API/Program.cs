@@ -4,7 +4,7 @@ using Project_API.Extensions;
 using Project_API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddHttpContextAccessor();
 // Add services to the container
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureJWT(builder.Configuration);
