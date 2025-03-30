@@ -55,6 +55,8 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapGet("/", () => "Task API is running");
+
 app.MapControllers();
 
 app.Run();

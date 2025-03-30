@@ -53,6 +53,8 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapGet("/", () => "Project API is running");
+
 app.MapControllers();
 
 app.Run();

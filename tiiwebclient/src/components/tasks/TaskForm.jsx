@@ -9,7 +9,7 @@ const TaskForm = () => {
     const { id, projectId } = useParams();
     const isEditMode = !!id;
     const navigate = useNavigate();
-    
+
     const [formData, setFormData] = useState({
         projectId: projectId || '',
         title: '',
@@ -18,6 +18,7 @@ const TaskForm = () => {
         assignedTo: '',
         dueDate: ''
     });
+    const [originalStatus, setOriginalStatus] = useState(''); // Track original status
     const [projects, setProjects] = useState([]);
     const [projectMembers, setProjectMembers] = useState([]);
     const [validated, setValidated] = useState(false);
@@ -47,11 +48,11 @@ const TaskForm = () => {
         try {
             setLoading(true);
             const task = await taskService.getById(id);
-            
+
             // Format the date to YYYY-MM-DD for the date input
-            const formattedDueDate = task.dueDate ? 
+            const formattedDueDate = task.dueDate ?
                 new Date(task.dueDate).toISOString().split('T')[0] : '';
-            
+
             setFormData({
                 projectId: task.projectId.toString(),
                 title: task.title,
@@ -60,7 +61,10 @@ const TaskForm = () => {
                 assignedTo: task.assignedTo || '',
                 dueDate: formattedDueDate
             });
-            
+
+            // Save the original status for comparison later
+            setOriginalStatus(task.status);
+
             await fetchProjectMembers(task.projectId);
         } catch (err) {
             console.error('Error fetching task:', err);
@@ -72,7 +76,7 @@ const TaskForm = () => {
 
     const fetchProjectMembers = async (projectId) => {
         if (!projectId) return;
-        
+
         try {
             const members = await projectService.getMembers(projectId);
             setProjectMembers(members);
@@ -88,7 +92,7 @@ const TaskForm = () => {
             ...prev,
             [name]: value
         }));
-        
+
         // If project changes, fetch its members
         if (name === 'projectId' && value) {
             fetchProjectMembers(value);
@@ -97,7 +101,7 @@ const TaskForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
             e.stopPropagation();
@@ -107,26 +111,42 @@ const TaskForm = () => {
 
         try {
             setLoading(true);
-            
+
             // Convert projectId to number
             const taskData = {
                 ...formData,
                 projectId: parseInt(formData.projectId)
             };
-            
+
             if (isEditMode) {
+                // First update the general task data
                 await taskService.update({
                     taskId: parseInt(id),
                     ...taskData
                 });
-            } else {
-                await taskService.create(taskData);
-            }
-            
-            if (projectId) {
-                navigate(`/projects/${projectId}`);
-            } else {
+
+                // If status has changed, specifically update the status
+                if (formData.status !== originalStatus) {
+                    await taskService.updateStatus(id, formData.status);
+                }
+
+                // If assignee has changed and there is an assignee selected
+                if (formData.assignedTo !== undefined) {
+                    await taskService.assign(id, formData.assignedTo);
+                }
+
+                // Always navigate to tasks page when editing an existing task
                 navigate('/tasks');
+            } else {
+                // For new tasks
+                await taskService.create(taskData);
+
+                // If creating from a project page, go back to that project
+                if (projectId) {
+                    navigate(`/projects/${projectId}`);
+                } else {
+                    navigate('/tasks');
+                }
             }
         } catch (err) {
             console.error('Error saving task:', err);
@@ -151,8 +171,8 @@ const TaskForm = () => {
         <div className="task-form-container fade-in">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1 className="task-form-title">{isEditMode ? 'Edit Task' : 'Create New Task'}</h1>
-                <Button 
-                    variant="outline-secondary" 
+                <Button
+                    variant="outline-secondary"
                     onClick={() => navigate(projectId ? `/projects/${projectId}` : '/tasks')}
                     className="d-flex align-items-center"
                 >
@@ -163,13 +183,13 @@ const TaskForm = () => {
                     {projectId ? 'Back to Project' : 'Back to Tasks'}
                 </Button>
             </div>
-            
+
             <Row className="justify-content-center">
                 <Col md={8}>
                     <Card className="task-form-card">
                         <Card.Body className="p-4">
                             {error && <Alert variant="danger">{error}</Alert>}
-                            
+
                             <Form noValidate validated={validated} onSubmit={handleSubmit}>
                                 <Form.Group className="mb-4">
                                     <Form.Label>Project</Form.Label>
@@ -229,25 +249,25 @@ const TaskForm = () => {
                                             <Form.Label>Status</Form.Label>
                                             <div className="status-selector">
                                                 <div className="status-options">
-                                                    <div 
+                                                    <div
                                                         className={`status-option-box ${formData.status === 'ToDo' ? 'active' : ''} todo`}
-                                                        onClick={() => setFormData({...formData, status: 'ToDo'})}
+                                                        onClick={() => setFormData({ ...formData, status: 'ToDo' })}
                                                     >
                                                         <div className="status-dot"></div>
                                                         <span>To Do</span>
                                                     </div>
-                                                    
-                                                    <div 
+
+                                                    <div
                                                         className={`status-option-box ${formData.status === 'InProgress' ? 'active' : ''} in-progress`}
-                                                        onClick={() => setFormData({...formData, status: 'InProgress'})}
+                                                        onClick={() => setFormData({ ...formData, status: 'InProgress' })}
                                                     >
                                                         <div className="status-dot"></div>
                                                         <span>In Progress</span>
                                                     </div>
-                                                    
-                                                    <div 
+
+                                                    <div
                                                         className={`status-option-box ${formData.status === 'Done' ? 'active' : ''} done`}
-                                                        onClick={() => setFormData({...formData, status: 'Done'})}
+                                                        onClick={() => setFormData({ ...formData, status: 'Done' })}
                                                     >
                                                         <div className="status-dot"></div>
                                                         <span>Done</span>
@@ -293,16 +313,16 @@ const TaskForm = () => {
                                 </Form.Group>
 
                                 <div className="d-flex justify-content-end mt-4">
-                                    <Button 
-                                        variant="outline-secondary" 
+                                    <Button
+                                        variant="outline-secondary"
                                         onClick={() => navigate(projectId ? `/projects/${projectId}` : '/tasks')}
                                         className="me-2"
                                     >
                                         Cancel
                                     </Button>
-                                    <Button 
-                                        variant="primary" 
-                                        type="submit" 
+                                    <Button
+                                        variant="primary"
+                                        type="submit"
                                         disabled={loading}
                                     >
                                         {loading ? (
@@ -318,7 +338,7 @@ const TaskForm = () => {
                             </Form>
                         </Card.Body>
                     </Card>
-                    
+
                     {isEditMode && (
                         <div className="text-center mt-4">
                             <Link to={`/tasks/${id}`} className="text-decoration-none">

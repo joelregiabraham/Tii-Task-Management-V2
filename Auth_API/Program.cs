@@ -64,6 +64,8 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapGet("/", () => "Auth API is running");
+
 app.MapControllers();
 
 app.Run();
