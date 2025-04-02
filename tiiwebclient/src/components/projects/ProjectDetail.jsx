@@ -1,23 +1,32 @@
+// components/projects/ProjectDetail.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { projectService } from '../../services/projectService';
 import { taskService } from '../../services/taskService';
-import { 
-    Container, Row, Col, Card, Button, Badge, Alert, 
+import {
+    Container, Row, Col, Card, Button, Badge, Alert,
     Table, Tabs, Tab, Dropdown, ProgressBar
 } from 'react-bootstrap';
 import ProjectMembers from './ProjectMembers';
+import { useAuth } from '../../contexts/AuthContext';
+import { canManageProjects, canManageTasks, isViewer } from '../../utils/roleUtils';
 import './ProjectDetail.css';
 
 const ProjectDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    
+    const { user } = useAuth();
+
     const [project, setProject] = useState(null);
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [activeTab, setActiveTab] = useState('overview');
+
+    // Permission checks
+    const userCanManageProjects = canManageProjects(user);
+    const userCanManageTasks = canManageTasks(user);
+    const userIsViewer = isViewer(user);
 
     useEffect(() => {
         fetchProjectData();
@@ -28,10 +37,10 @@ const ProjectDetail = () => {
             setLoading(true);
             const projectData = await projectService.getById(id);
             setProject(projectData);
-            
+
             const tasksData = await taskService.getByProject(id);
             setTasks(tasksData);
-            
+
             setError('');
         } catch (err) {
             console.error('Error fetching project data:', err);
@@ -79,11 +88,11 @@ const ProjectDetail = () => {
         const todoCount = tasks.filter(t => t.status === 'ToDo').length;
         const inProgressCount = tasks.filter(t => t.status === 'InProgress').length;
         const doneCount = tasks.filter(t => t.status === 'Done').length;
-        
+
         const todoPercent = total > 0 ? Math.round((todoCount / total) * 100) : 0;
         const inProgressPercent = total > 0 ? Math.round((inProgressCount / total) * 100) : 0;
         const donePercent = total > 0 ? Math.round((doneCount / total) * 100) : 0;
-        
+
         return {
             total,
             todoCount,
@@ -148,41 +157,45 @@ const ProjectDetail = () => {
                     </div>
                 </div>
                 <div className="project-actions">
-                    <Link to={`/projects/${id}/tasks/create`}>
-                        <Button variant="primary" className="me-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Add Task
-                        </Button>
-                    </Link>
-                    <Dropdown>
-                        <Dropdown.Toggle variant="light" id="project-actions-dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="12" cy="12" r="1"></circle>
-                                <circle cx="12" cy="5" r="1"></circle>
-                                <circle cx="12" cy="19" r="1"></circle>
-                            </svg>
-                        </Dropdown.Toggle>
+                    {userCanManageTasks && (
+                        <Link to={`/projects/${id}/tasks/create`}>
+                            <Button variant="primary" className="me-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Add Task
+                            </Button>
+                        </Link>
+                    )}
+                    {userCanManageProjects && (
+                        <Dropdown>
+                            <Dropdown.Toggle variant="light" id="project-actions-dropdown">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="12" r="1"></circle>
+                                    <circle cx="12" cy="5" r="1"></circle>
+                                    <circle cx="12" cy="19" r="1"></circle>
+                                </svg>
+                            </Dropdown.Toggle>
 
-                        <Dropdown.Menu align="end">
-                            <Dropdown.Item as={Link} to={`/projects/edit/${id}`}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2">
-                                    <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                                </svg>
-                                Edit Project
-                            </Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item className="text-danger" onClick={handleDeleteProject}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2">
-                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                </svg>
-                                Delete Project
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                            <Dropdown.Menu align="end">
+                                <Dropdown.Item as={Link} to={`/projects/edit/${id}`}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2">
+                                        <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                    </svg>
+                                    Edit Project
+                                </Dropdown.Item>
+                                <Dropdown.Divider />
+                                <Dropdown.Item className="text-danger" onClick={handleDeleteProject}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                    Delete Project
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    )}
                 </div>
             </div>
 
@@ -205,7 +218,7 @@ const ProjectDetail = () => {
                                     </p>
                                 </Card.Body>
                             </Card>
-                            
+
                             <Card className="mb-4">
                                 <Card.Header className="bg-white d-flex justify-content-between align-items-center">
                                     <h5 className="mb-0">Task Progress</h5>
@@ -217,30 +230,32 @@ const ProjectDetail = () => {
                                     {stats.total === 0 ? (
                                         <div className="text-center py-4">
                                             <p className="text-muted mb-3">No tasks have been created for this project yet.</p>
-                                            <Link to={`/projects/${id}/tasks/create`}>
-                                                <Button variant="outline-primary">Create First Task</Button>
-                                            </Link>
+                                            {userCanManageTasks && (
+                                                <Link to={`/projects/${id}/tasks/create`}>
+                                                    <Button variant="outline-primary">Create First Task</Button>
+                                                </Link>
+                                            )}
                                         </div>
                                     ) : (
                                         <>
                                             <div className="progress-stacked mb-4">
-                                                <ProgressBar 
-                                                    className="progress-segment-done" 
-                                                    now={stats.donePercent} 
-                                                    key={1} 
+                                                <ProgressBar
+                                                    className="progress-segment-done"
+                                                    now={stats.donePercent}
+                                                    key={1}
                                                 />
-                                                <ProgressBar 
-                                                    className="progress-segment-progress" 
-                                                    now={stats.inProgressPercent} 
-                                                    key={2} 
+                                                <ProgressBar
+                                                    className="progress-segment-progress"
+                                                    now={stats.inProgressPercent}
+                                                    key={2}
                                                 />
-                                                <ProgressBar 
-                                                    className="progress-segment-todo" 
-                                                    now={stats.todoPercent} 
-                                                    key={3} 
+                                                <ProgressBar
+                                                    className="progress-segment-todo"
+                                                    now={stats.todoPercent}
+                                                    key={3}
                                                 />
                                             </div>
-                                            
+
                                             <div className="task-stats">
                                                 <div className="task-stat-item">
                                                     <div className="task-stat-label">
@@ -251,7 +266,7 @@ const ProjectDetail = () => {
                                                         {stats.todoCount} tasks
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="task-stat-item">
                                                     <div className="task-stat-label">
                                                         <span className="status-dot status-progress"></span>
@@ -261,7 +276,7 @@ const ProjectDetail = () => {
                                                         {stats.inProgressCount} tasks
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="task-stat-item">
                                                     <div className="task-stat-label">
                                                         <span className="status-dot status-done"></span>
@@ -277,7 +292,7 @@ const ProjectDetail = () => {
                                 </Card.Body>
                             </Card>
                         </Col>
-                        
+
                         <Col lg={4}>
                             <Card className="mb-4">
                                 <Card.Header className="bg-white">
@@ -290,20 +305,22 @@ const ProjectDetail = () => {
                         </Col>
                     </Row>
                 </Tab>
-                
+
                 <Tab eventKey="tasks" title="Tasks">
                     <Card>
                         <Card.Header className="bg-white d-flex justify-content-between align-items-center">
                             <h5 className="mb-0">Task List</h5>
-                            <Link to={`/projects/${id}/tasks/create`}>
-                                <Button variant="primary" size="sm">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1">
-                                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    </svg>
-                                    Add Task
-                                </Button>
-                            </Link>
+                            {userCanManageTasks && (
+                                <Link to={`/projects/${id}/tasks/create`}>
+                                    <Button variant="primary" size="sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-1">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+                                        Add Task
+                                    </Button>
+                                </Link>
+                            )}
                         </Card.Header>
                         <Card.Body className="p-0">
                             {tasks.length === 0 ? (
@@ -313,9 +330,11 @@ const ProjectDetail = () => {
                                         <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
                                     </svg>
                                     <p className="text-muted mb-3">No tasks have been created for this project yet.</p>
-                                    <Link to={`/projects/${id}/tasks/create`}>
-                                        <Button variant="outline-primary">Create First Task</Button>
-                                    </Link>
+                                    {userCanManageTasks && (
+                                        <Link to={`/projects/${id}/tasks/create`}>
+                                            <Button variant="outline-primary">Create First Task</Button>
+                                        </Link>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="table-responsive">
@@ -357,21 +376,25 @@ const ProjectDetail = () => {
                                                                     <circle cx="12" cy="12" r="3"></circle>
                                                                 </svg>
                                                             </Link>
-                                                            <Link to={`/tasks/edit/${task.taskId}`} className="btn btn-sm btn-outline-secondary me-1">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                    <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                                                                </svg>
-                                                            </Link>
-                                                            <Button 
-                                                                variant="outline-danger" 
-                                                                size="sm"
-                                                                onClick={() => handleDeleteTask(task.taskId)}
-                                                            >
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                                    <polyline points="3 6 5 6 21 6"></polyline>
-                                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                                </svg>
-                                                            </Button>
+                                                            {userCanManageTasks && (
+                                                                <>
+                                                                    <Link to={`/tasks/edit/${task.taskId}`} className="btn btn-sm btn-outline-secondary me-1">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                            <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                                                        </svg>
+                                                                    </Link>
+                                                                    <Button
+                                                                        variant="outline-danger"
+                                                                        size="sm"
+                                                                        onClick={() => handleDeleteTask(task.taskId)}
+                                                                    >
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                                        </svg>
+                                                                    </Button>
+                                                                </>
+                                                            )}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -383,38 +406,40 @@ const ProjectDetail = () => {
                         </Card.Body>
                     </Card>
                 </Tab>
-                
-                <Tab eventKey="settings" title="Settings">
-                    <Card>
-                        <Card.Body>
-                            <h5 className="card-title mb-4">Project Settings</h5>
-                            
-                            <div className="settings-section mb-4">
-                                <h6>General Settings</h6>
-                                <div className="settings-actions mt-3">
-                                    <Link to={`/projects/edit/${id}`} className="btn btn-outline-primary">
-                                        Edit Project Details
-                                    </Link>
-                                </div>
-                            </div>
-                            
-                            <div className="settings-section mb-4">
-                                <h6>Danger Zone</h6>
-                                <div className="danger-zone p-3 mt-3">
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 className="mb-1">Delete this project</h6>
-                                            <p className="text-muted mb-0">Once you delete a project, there is no going back. This action cannot be undone.</p>
-                                        </div>
-                                        <Button variant="danger" onClick={handleDeleteProject}>
-                                            Delete Project
-                                        </Button>
+
+                {userCanManageProjects && (
+                    <Tab eventKey="settings" title="Settings">
+                        <Card>
+                            <Card.Body>
+                                <h5 className="card-title mb-4">Project Settings</h5>
+
+                                <div className="settings-section mb-4">
+                                    <h6>General Settings</h6>
+                                    <div className="settings-actions mt-3">
+                                        <Link to={`/projects/edit/${id}`} className="btn btn-outline-primary">
+                                            Edit Project Details
+                                        </Link>
                                     </div>
                                 </div>
-                            </div>
-                        </Card.Body>
-                    </Card>
-                </Tab>
+
+                                <div className="settings-section mb-4">
+                                    <h6>Danger Zone</h6>
+                                    <div className="danger-zone p-3 mt-3">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 className="mb-1">Delete this project</h6>
+                                                <p className="text-muted mb-0">Once you delete a project, there is no going back. This action cannot be undone.</p>
+                                            </div>
+                                            <Button variant="danger" onClick={handleDeleteProject}>
+                                                Delete Project
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Tab>
+                )}
             </Tabs>
         </div>
     );

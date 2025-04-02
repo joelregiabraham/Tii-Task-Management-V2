@@ -74,7 +74,8 @@ namespace Task_API.Services
             try
             {
                 var client = CreateClientWithAuthToken();
-                var response = await client.GetAsync($"api/projects/{projectId}/members/{userId}/access");
+                var roleString = string.Join(",", allowedRoles);
+                var response = await client.GetAsync($"api/projects/{projectId}/members/{userId}/role?allowedRoles={roleString}");
                 return response.IsSuccessStatusCode;
             }
             catch (Exception)

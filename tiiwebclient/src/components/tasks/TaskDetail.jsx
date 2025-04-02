@@ -1,13 +1,16 @@
-// components/tasks/TaskDetail.js
+// components/tasks/TaskDetail.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { taskService } from '../../services/taskService';
 import { projectService } from '../../services/projectService';
 import { Container, Card, Button, Badge, Alert, Form, Row, Col } from 'react-bootstrap';
+import { useAuth } from '../../contexts/AuthContext';
+import { canManageProjects, canManageTasks } from '../../utils/roleUtils';
 
 const TaskDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const [task, setTask] = useState(null);
     const [projectMembers, setProjectMembers] = useState([]);
@@ -15,6 +18,10 @@ const TaskDetail = () => {
     const [error, setError] = useState('');
     const [statusUpdate, setStatusUpdate] = useState('');
     const [assigneeUpdate, setAssigneeUpdate] = useState('');
+
+    // Permission checks
+    const userCanManageProjects = canManageProjects(user);
+    const userCanManageTasks = canManageTasks(user);
 
     useEffect(() => {
         fetchTask();
@@ -121,12 +128,14 @@ const TaskDetail = () => {
         <Container className="mt-4">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>{task.title}</h2>
-                <div>
-                    <Link to={`/tasks/edit/${id}`}>
-                        <Button variant="outline-primary" className="me-2">Edit Task</Button>
-                    </Link>
-                    <Button variant="outline-danger" onClick={handleDeleteTask}>Delete Task</Button>
-                </div>
+                {userCanManageTasks && (
+                    <div>
+                        <Link to={`/tasks/edit/${id}`}>
+                            <Button variant="outline-primary" className="me-2">Edit Task</Button>
+                        </Link>
+                        <Button variant="outline-danger" onClick={handleDeleteTask}>Delete Task</Button>
+                    </div>
+                )}
             </div>
 
             {error && <Alert variant="danger">{error}</Alert>}
@@ -175,37 +184,41 @@ const TaskDetail = () => {
                                         </Badge>
                                     </div>
 
-                                    <Form.Group className="mb-4">
-                                        <Form.Label>Update Status</Form.Label>
-                                        <Form.Select
-                                            value={statusUpdate}
-                                            onChange={handleStatusChange}
-                                        >
-                                            <option value="ToDo">To Do</option>
-                                            <option value="InProgress">In Progress</option>
-                                            <option value="Done">Done</option>
-                                        </Form.Select>
-                                    </Form.Group>
+                                    {userCanManageTasks && (
+                                        <Form.Group className="mb-4">
+                                            <Form.Label>Update Status</Form.Label>
+                                            <Form.Select
+                                                value={statusUpdate}
+                                                onChange={handleStatusChange}
+                                            >
+                                                <option value="ToDo">To Do</option>
+                                                <option value="InProgress">In Progress</option>
+                                                <option value="Done">Done</option>
+                                            </Form.Select>
+                                        </Form.Group>
+                                    )}
 
                                     <h5>Assignment</h5>
                                     <div className="mb-3">
                                         {task.assignedToName || 'Unassigned'}
                                     </div>
 
-                                    <Form.Group>
-                                        <Form.Label>Assign To</Form.Label>
-                                        <Form.Select
-                                            value={assigneeUpdate}
-                                            onChange={handleAssigneeChange}
-                                        >
-                                            <option value="">Unassigned</option>
-                                            {projectMembers.map(member => (
-                                                <option key={member.userId} value={member.userId}>
-                                                    {member.username}
-                                                </option>
-                                            ))}
-                                        </Form.Select>
-                                    </Form.Group>
+                                    {userCanManageProjects && (
+                                        <Form.Group>
+                                            <Form.Label>Assign To</Form.Label>
+                                            <Form.Select
+                                                value={assigneeUpdate}
+                                                onChange={handleAssigneeChange}
+                                            >
+                                                <option value="">Unassigned</option>
+                                                {projectMembers.map(member => (
+                                                    <option key={member.userId} value={member.userId}>
+                                                        {member.username}
+                                                    </option>
+                                                ))}
+                                            </Form.Select>
+                                        </Form.Group>
+                                    )}
                                 </Card.Body>
                             </Card>
                         </Col>
