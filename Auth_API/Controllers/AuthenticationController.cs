@@ -44,7 +44,8 @@ namespace Auth_API.Controllers
                 return Unauthorized();
 
             var tokenDto = await _authService.CreateToken(true);
-
+            
+            //return 200OK
             return Ok(tokenDto);
         }
 
