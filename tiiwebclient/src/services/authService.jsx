@@ -1,5 +1,5 @@
 // services/authService.js
-const API_URL = 'https://localhost:7071/api';
+const API_URL = 'https://localhost:44309/api';
 
 export const authService = {
     login,
