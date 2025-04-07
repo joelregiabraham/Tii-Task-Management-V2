@@ -1,155 +1,181 @@
-/* dashboard.css */
+
 .dashboard-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
 }
 
 .dashboard-title {
-  font-weight: 700;
-  color: var(--neutral-900);
-  margin-bottom: var(--space-lg);
+    font-weight: 700;
+    font-size: var(--font-size-3xl);
+    color: var(--neutral-900);
+    margin-bottom: var(--space-lg);
 }
 
+/* ========== Stat Cards ========== */
 .stat-card {
-  position: relative;
-  overflow: hidden;
+    position: relative;
+    overflow: hidden;
+    padding: var(--space-lg);
+    border-radius: var(--border-radius-lg);
+    background-color: white;
+    box-shadow: var(--shadow-md);
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
 }
+
+    .stat-card:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-2px);
+    }
 
 .stat-card-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 48px;
-  width: 48px;
-  border-radius: var(--border-radius-md);
-  margin-bottom: var(--space-md);
-  color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    width: 48px;
+    border-radius: var(--border-radius-full);
+    margin-bottom: var(--space-md);
+    color: var(--primary-color);
+    background-color: var(--primary-light);
 }
 
+/* Optional color variants */
 .bg-primary-light {
-  background-color: rgba(45, 99, 237, 0.1);
+  background-color: rgba(45, 99, 237, 0.2); /* Slightly deeper blue */
 }
 
 .bg-success-light {
-  background-color: rgba(0, 200, 83, 0.1);
+  background-color: rgba(0, 200, 83, 0.2); /* Richer green */
 }
 
 .bg-warning-light {
-  background-color: rgba(255, 171, 0, 0.1);
+  background-color: rgba(255, 171, 0, 0.2); /* More visible amber */
 }
 
 .bg-info-light {
-  background-color: rgba(33, 150, 243, 0.1);
+  background-color: rgba(33, 150, 243, 0.2); /* Brighter blue */
 }
 
 .stat-card-title {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
-  margin-bottom: var(--space-xs);
-  color: var(--neutral-900);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--neutral-900);
+    margin-bottom: var(--space-xs);
 }
 
 .stat-card-text {
-  color: var(--neutral-500);
-  font-size: var(--font-size-sm);
-  margin-bottom: 0;
+    color: var(--neutral-500);
+    font-size: var(--font-size-sm);
+    margin-bottom: 0;
 }
 
+/* ========== Project List ========== */
 .project-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
 }
 
 .project-item {
-  display: flex;
-  align-items: center;
-  padding: var(--space-md);
-  border-radius: var(--border-radius-md);
-  transition: background-color var(--transition-fast);
-  text-decoration: none;
-  color: inherit;
+    display: flex;
+    align-items: center;
+    padding: var(--space-md);
+    border-radius: var(--border-radius-md);
+    background-color: white;
+    box-shadow: var(--shadow-sm);
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+    text-decoration: none;
+    color: inherit;
 }
 
-.project-item:hover {
-  background-color: var(--neutral-50);
-}
+    .project-item:hover {
+        background-color: var(--neutral-100);
+        box-shadow: var(--shadow-md);
+    }
 
 .project-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  width: 40px;
-  border-radius: var(--border-radius-md);
-  background-color: var(--primary-light);
-  color: white;
-  font-weight: 600;
-  margin-right: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    border-radius: var(--border-radius-full);
+    background-color: var(--primary-light);
+    color: white;
+    font-weight: 600;
+    margin-right: var(--space-md);
 }
 
 .project-details {
-  flex: 1;
+    flex: 1;
 }
 
 .project-name {
-  font-weight: 600;
-  margin-bottom: var(--space-xs);
-  color: var(--neutral-900);
+    font-weight: 600;
+    font-size: var(--font-size-md);
+    color: var(--neutral-900);
+    margin-bottom: var(--space-xs);
 }
 
 .project-description {
-  color: var(--neutral-500);
-  font-size: var(--font-size-sm);
-  margin-bottom: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+    color: var(--neutral-500);
+    font-size: var(--font-size-sm);
+    margin-bottom: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .project-arrow {
-  color: var(--neutral-400);
+    color: var(--neutral-400);
+    transition: color var(--transition-fast);
 }
 
 .project-item:hover .project-arrow {
-  color: var(--primary-color);
+    color: var(--primary-color);
 }
 
+/* ========== Task Table ========== */
 .task-table th {
-  border-top: none;
-  font-weight: 600;
-  color: var(--neutral-700);
-  font-size: var(--font-size-sm);
-  padding: var(--space-md) var(--space-lg);
+    border-top: none;
+    font-weight: 600;
+    color: var(--neutral-700);
+    font-size: var(--font-size-sm);
+    padding: var(--space-md) var(--space-lg);
 }
 
 .task-table td {
-  padding: var(--space-md) var(--space-lg);
-  vertical-align: middle;
+    padding: var(--space-md) var(--space-lg);
+    vertical-align: middle;
+}
+
+/* Links */
+.task-link,
+.project-link {
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-fast);
 }
 
 .task-link {
-  text-decoration: none;
-  color: var(--neutral-900);
-  font-weight: 500;
-  transition: color var(--transition-fast);
-}
-
-.task-link:hover {
-  color: var(--primary-color);
+    color: var(--neutral-900);
 }
 
 .project-link {
-  text-decoration: none;
-  color: var(--neutral-600);
-  font-size: var(--font-size-sm);
-  transition: color var(--transition-fast);
+    color: var(--neutral-600);
+    font-size: var(--font-size-sm);
 }
 
-.project-link:hover {
-  color: var(--primary-color);
+    .task-link:hover,
+    .project-link:hover {
+        color: var(--primary-color);
+    }
+
+.dashboard {
+    padding: 0; /* prevent conflicting spacing */
+    margin: 0;
 }

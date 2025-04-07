@@ -1,9 +1,9 @@
 /* ClientApp/src/styles/theme.css */
 :root {
   /* Primary color palette */
-  --primary-color: #2d63ed;
-  --primary-dark: #1e47b5;
-  --primary-light: #6b95ff;
+  --primary-color: #34BEED;
+  --primary-dark: #2BA8D2;
+  --primary-light: #6BD6F1;
   
   /* Secondary colors */
   --secondary-color: #3e4a79;
@@ -18,9 +18,9 @@
   /* Neutrals */
   --neutral-900: #1a1a2e;
   --neutral-800: #232345;
-  --neutral-700: #2f2f63;
-  --neutral-600: #3a3a79;
-  --neutral-500: #565695;
+  --neutral-700: #A0A0A0;
+  --neutral-600: #B4B4B4;
+  --neutral-500: #C0C0C0;
   --neutral-400: #7676a8;
   --neutral-300: #9999be;
   --neutral-200: #bbbbdb;
@@ -39,9 +39,9 @@
   --status-done: var(--success-color);
   
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0px 2px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0px 8px 20px rgba(0, 0, 0, 0.2);
   
   /* Spacing */
   --space-xs: 0.25rem;
@@ -52,7 +52,7 @@
   --space-2xl: 3rem;
   
   /* Typography */
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family: 'Nunito', system-ui, -apple-system, sans-serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;
@@ -62,9 +62,9 @@
   --font-size-3xl: 1.875rem;
   
   /* Border radius */
-  --border-radius-sm: 0.25rem;
-  --border-radius-md: 0.5rem;
-  --border-radius-lg: 0.75rem;
+  --border-radius-sm: 0.5rem;
+  --border-radius-md: 0.75rem;
+  --border-radius-lg: 1.25rem;
   --border-radius-xl: 1rem;
   --border-radius-full: 9999px;
   
