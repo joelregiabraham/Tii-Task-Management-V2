@@ -169,12 +169,12 @@ const TaskForm = () => {
 
     return (
         <div className="task-form-container fade-in">
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="task-form-header">
                 <h1 className="task-form-title">{isEditMode ? 'Edit Task' : 'Create New Task'}</h1>
                 <Button
                     variant="outline-secondary"
                     onClick={() => navigate(projectId ? `/projects/${projectId}` : '/tasks')}
-                    className="d-flex align-items-center"
+                    className="task-form-back d-flex align-items-center"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2">
                         <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -183,6 +183,7 @@ const TaskForm = () => {
                     {projectId ? 'Back to Project' : 'Back to Tasks'}
                 </Button>
             </div>
+
 
             <Row className="justify-content-center">
                 <Col md={8}>
@@ -285,7 +286,7 @@ const TaskForm = () => {
                                                 onChange={handleChange}
                                                 disabled={!formData.projectId}
                                             >
-                                                <option value="">Unassigned</option>
+                                                <option value="">Assign...</option>
                                                 {projectMembers.map(member => (
                                                     <option key={member.userId} value={member.userId}>
                                                         {member.username}

@@ -1,79 +1,157 @@
 /* TaskForm.css */
 .task-form-container {
-  margin-bottom: var(--space-2xl);
+    margin-bottom: var(--space-2xl);
+    background-color: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--space-2xl);
+    border: 1px solid var(--neutral-100);
+    transition: box-shadow var(--transition-fast);
+}
+
+    .task-form-container:hover {
+        box-shadow: var(--shadow-lg);
+    }
+
+.task-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+    gap: var(--space-sm);
 }
 
 .task-form-title {
-  font-weight: 700;
-  color: var(--neutral-900);
+    font-weight: 700;
+    color: var(--neutral-900);
+    margin: 0;
+}
+
+.task-form-back {
+    border-radius: var(--border-radius-md);
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-sm);
 }
 
 .task-form-card {
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-md);
-  border: none;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: none;
+    padding: var(--space-xl);
+    background-color: white;
+    max-width: 720px; /* NEW: wider than typical md column */
+    margin: 0 auto;    /* NEW: center it */
 }
 
+    .task-form-card input,
+    .task-form-card textarea,
+    .task-form-card select {
+        border-radius: var(--border-radius-md);
+        border: 1px solid var(--neutral-200);
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--font-size-md);
+        color: var(--neutral-900);
+        background-color: var(--neutral-50);
+        transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        width: 100%;
+    }
+
+        .task-form-card input:focus,
+        .task-form-card textarea:focus,
+        .task-form-card select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px var(--primary-color);
+            outline: none;
+            background-color: white;
+        }
+
+    .task-form-card label {
+        font-weight: 500;
+        color: var(--neutral-800);
+        margin-bottom: var(--space-xs);
+        display: block;
+    }
+
 .status-selector {
-  margin-bottom: var(--space-md);
+    margin-bottom: var(--space-md);
 }
 
 .status-options {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
 }
 
 .status-option-box {
-  display: flex;
-  align-items: center;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--border-radius-md);
-  border: 1px solid var(--neutral-200);
-  cursor: pointer;
-  transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--neutral-200);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background-color: var(--neutral-50);
 }
 
-.status-option-box:hover {
-  background-color: var(--neutral-50);
-  border-color: var(--neutral-300);
-}
+    .status-option-box:hover {
+        background-color: var(--neutral-100);
+        border-color: var(--neutral-300);
+    }
 
-.status-option-box.active {
-  background-color: var(--neutral-50);
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 1px var(--primary-color);
-  font-weight: 500;
-}
+    .status-option-box.active {
+        background-color: var(--neutral-100);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 1px var(--primary-color);
+        font-weight: 500;
+    }
 
-.status-option-box.todo .status-dot {
-  background-color: var(--status-todo);
-}
+    .status-option-box.todo .status-dot {
+        background-color: var(--status-todo);
+    }
 
-.status-option-box.in-progress .status-dot {
-  background-color: var(--status-in-progress);
-}
+    .status-option-box.in-progress .status-dot {
+        background-color: var(--status-in-progress);
+    }
 
-.status-option-box.done .status-dot {
-  background-color: var(--status-done);
-}
+    .status-option-box.done .status-dot {
+        background-color: var(--status-done);
+    }
 
 .status-dot {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: var(--space-sm);
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: var(--space-sm);
 }
 
+.task-form-actions {
+    margin-top: var(--space-lg);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-md);
+}
+
+    .task-form-actions .btn {
+        border-radius: var(--border-radius-md);
+        padding: var(--space-sm) var(--space-lg);
+        font-weight: 600;
+    }
+
 @media (max-width: 768px) {
-  .status-options {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-  
-  .status-option-box {
-    flex: 1;
-    min-width: 100px;
-  }
+    .status-options {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .status-option-box {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .task-form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
