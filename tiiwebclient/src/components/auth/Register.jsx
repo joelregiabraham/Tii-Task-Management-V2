@@ -65,13 +65,11 @@ const Register = () => {
         <div className="auth-container">
             <div className="auth-wrapper">
                 <div className="auth-brand text-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="brand-icon text-primary">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                    </svg>
+                    <img src="/tii-logo.png" alt="Tii Logo" className="auth-logo" />
                     <h1 className="brand-text mt-3">Tii Task Manager</h1>
                     <p className="text-muted">Create your account</p>
                 </div>
+
                 
                 <Card className="auth-card">
                     <Card.Body className="p-4">

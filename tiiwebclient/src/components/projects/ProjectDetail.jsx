@@ -1,5 +1,5 @@
 // components/projects/ProjectDetail.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { projectService } from '../../services/projectService';
 import { taskService } from '../../services/taskService';
@@ -9,7 +9,7 @@ import {
 } from 'react-bootstrap';
 import ProjectMembers from './ProjectMembers';
 import { useAuth } from '../../contexts/AuthContext';
-import { canManageProjects, canManageTasks, isViewer } from '../../utils/roleUtils';
+import { canManageProjects, canManageTasks } from '../../utils/roleUtils'; // removed `isViewer`
 import './ProjectDetail.css';
 
 const ProjectDetail = () => {
@@ -26,13 +26,9 @@ const ProjectDetail = () => {
     // Permission checks
     const userCanManageProjects = canManageProjects(user);
     const userCanManageTasks = canManageTasks(user);
-    const userIsViewer = isViewer(user);
 
-    useEffect(() => {
-        fetchProjectData();
-    }, [id]);
-
-    const fetchProjectData = async () => {
+    // FIXED: fetchProjectData hoisted + wrapped in useCallback
+    const fetchProjectData = useCallback(async () => {
         try {
             setLoading(true);
             const projectData = await projectService.getById(id);
@@ -48,7 +44,11 @@ const ProjectDetail = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        fetchProjectData();
+    }, [fetchProjectData]);
 
     const handleDeleteProject = async () => {
         if (window.confirm('Are you sure you want to delete this project? This will also delete all tasks within this project.')) {

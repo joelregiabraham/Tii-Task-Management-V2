@@ -19,25 +19,27 @@ const ProjectForm = () => {
 
     useEffect(() => {
         if (isEditMode) {
+        const fetchProject = async () => {
+                try {
+                    setLoading(true);
+                    const project = await projectService.getById(id);
+                    setFormData({
+                        name: project.name,
+                        description: project.description || ''
+                    });
+                } catch (err) {
+                    console.error('Error fetching project:', err);
+                    setError('Failed to load project details. Please try again or go back to projects.');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
             fetchProject();
         }
     }, [id, isEditMode]);
 
-    const fetchProject = async () => {
-        try {
-            setLoading(true);
-            const project = await projectService.getById(id);
-            setFormData({
-                name: project.name,
-                description: project.description || ''
-            });
-        } catch (err) {
-            console.error('Error fetching project:', err);
-            setError('Failed to load project details. Please try again or go back to projects.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -68,7 +70,7 @@ const ProjectForm = () => {
                 
                 // Show success message or notification
             } else {
-                const newProject = await projectService.create(formData);
+                await projectService.create(formData);
                 
                 // If needed, get the ID of the new project for redirection
                 // const newId = newProject.projectId;

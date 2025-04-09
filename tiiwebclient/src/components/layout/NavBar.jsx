@@ -26,18 +26,13 @@ const NavBar = ({ toggleSidebar }) => {
                     className="sidebar-toggle me-3 d-md-none"
                     onClick={toggleSidebar}
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
+                    <img src="/tii-logo.png" alt="Tii Logo" className="navbar-brand-logo" />
+
                 </button>
 
                 <Navbar.Brand as={Link} to="/" className="navbar-brand-custom">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                    </svg>
+                    <img src="/tii-logo.png" alt="Tii Logo" className="navbar-brand-logo" />
+
                     <span className="brand-text">Tii Task Manager</span>
                 </Navbar.Brand>
 
@@ -45,13 +40,12 @@ const NavBar = ({ toggleSidebar }) => {
                     {user ? (
                         <Dropdown align="end">
                             <Dropdown.Toggle as="div" className="user-dropdown">
-                                <div className="user-avatar">
-                                    {getUserInitials()}
-                                </div>
+                                <img src="/userProfile.png" alt="User Profile" className="user-avatar-img" />
                                 <div className="user-info d-none d-lg-flex">
                                     <span className="user-name">{user.username}</span>
                                 </div>
                             </Dropdown.Toggle>
+
 
                             <Dropdown.Menu>
                                 <Dropdown.Divider />

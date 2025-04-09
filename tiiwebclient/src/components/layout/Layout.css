@@ -107,10 +107,12 @@
 }
 
 .main-content {
-  flex: 1;
-  padding: 0;
-  overflow-y: auto;
+    flex: 1;
+    padding: 0;
+    overflow-y: auto;
+    width: 100%;
 }
+
 
 .navbar-custom {
     background-color: white;
@@ -127,11 +129,11 @@
   color: var(--primary-color);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
 }
 
 .navbar-brand-logo {
-  height: 30px;
+  height: 80px;
   width: auto;
 }
 
@@ -157,6 +159,16 @@
   border-radius: var(--border-radius-md);
   transition: background-color var(--transition-fast);
 }
+
+.user-avatar-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.5rem;
+    border: 1px solid var(--neutral-200);
+}
+
 
 .user-dropdown:hover {
   background-color: var(--neutral-100);
