@@ -21,6 +21,16 @@
   color: var(--primary-color);
 }
 
+.auth-logo {
+    display: block;
+    margin: 0 auto;
+    height: 120px;
+    width: auto;
+    padding-bottom: 0.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+
 .brand-text {
   font-weight: 700;
   font-size: var(--font-size-2xl);
