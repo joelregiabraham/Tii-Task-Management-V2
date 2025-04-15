@@ -207,7 +207,8 @@ const CalendarView = () => {
                                                     className={`calendar-task status-${getStatusClass(task.status)}`}
                                                     title={task.title}
                                                 >
-                                                    {task.title}
+                                                    <span className="task-dot"></span>
+                                                    <span className="task-title-truncate">{task.title}</span>
                                                 </div>
                                             ))}
                                             {day.tasks.length > 2 && (

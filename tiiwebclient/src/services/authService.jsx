@@ -16,18 +16,14 @@ async function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
-    try {
-        const response = await fetch(`${API_URL}/auth/login`, requestOptions);
-        const data = await handleResponse(response);
+    const response = await fetch(`${API_URL}/auth/login`, requestOptions);
+    const data = await handleResponse(response);
 
-        // Store user details and jwt token in local storage to keep user logged in
-        localStorage.setItem('user', JSON.stringify(data));
+    // Optional: if your backend sends expiry info, save it
+    // localStorage.setItem('user', JSON.stringify({ ...data, expiry: Date.now() + 60 * 60 * 1000 }));
+    localStorage.setItem('user', JSON.stringify(data));
 
-        return data;
-    } catch (error) {
-        console.error('Login error:', error);
-        throw error;
-    }
+    return data;
 }
 
 async function register(userDetails) {
@@ -37,17 +33,11 @@ async function register(userDetails) {
         body: JSON.stringify(userDetails)
     };
 
-    try {
-        const response = await fetch(`${API_URL}/auth/register`, requestOptions);
-        return handleResponse(response);
-    } catch (error) {
-        console.error('Registration error:', error);
-        throw error;
-    }
+    const response = await fetch(`${API_URL}/auth/register`, requestOptions);
+    return handleResponse(response);
 }
 
 function logout() {
-    // Remove user from local storage to log user out
     localStorage.removeItem('user');
 }
 
@@ -67,40 +57,34 @@ async function refreshToken() {
         })
     };
 
-    try {
-        const response = await fetch(`${API_URL}/auth/refresh`, requestOptions);
-        const data = await handleResponse(response);
+    const response = await fetch(`${API_URL}/auth/refresh`, requestOptions);
+    const data = await handleResponse(response);
 
-        // Store the new tokens
-        localStorage.setItem('user', JSON.stringify({
-            ...currentUser,
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken
-        }));
+    // Save new token
+    localStorage.setItem('user', JSON.stringify({
+        ...currentUser,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken
+    }));
 
-        return data;
-    } catch (error) {
-        // If refresh token fails, log the user out
-        logout();
-        throw error;
-    }
+    return data;
 }
 
 function getCurrentUser() {
     const userStr = localStorage.getItem('user');
     if (!userStr) return null;
-
     return JSON.parse(userStr);
 }
 
+// ? FIXED: Don’t logout here!
 async function handleResponse(response) {
     const text = await response.text();
     const data = text && JSON.parse(text);
 
     if (!response.ok) {
-        if (response.status === 401) {
-            // Auto logout if 401 response returned from api
-            logout();
+        // Instead of logging out — let retryRequest decide what to do
+        if ([401, 403].includes(response.status)) {
+            return Promise.reject('Unauthorized');
         }
 
         const error = (data && data.message) || response.statusText;
